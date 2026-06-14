@@ -121,6 +121,37 @@ main{max-width:1320px;margin:0 auto;padding:28px 20px 0}
   color:var(--muted);font-size:9px;display:flex;align-items:center;justify-content:center;
   cursor:help;
 }
+.kpi-tip .tip-box{
+  display:none;position:absolute;z-index:400;
+  bottom:calc(100% + 8px);right:0;left:auto;transform:none;
+  background:#1e1e28;border:1px solid var(--border);
+  color:var(--text);font-size:12px;line-height:1.6;
+  padding:10px 14px;border-radius:8px;
+  min-width:220px;max-width:280px;white-space:normal;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+  pointer-events:none;text-align:left;
+}
+.kpi-tip:hover .tip-box{display:block}
+.kpi-tip .tip-box::after{
+  content:\'\';position:absolute;top:100%;right:6px;left:auto;transform:none;
+  border:6px solid transparent;border-top-color:#1e1e28;
+}
+/* tip-box dentro do kpi-tip (posição ajustada para não sair da tela) */
+.kpi-tip .tip-box{
+  display:none;position:absolute;z-index:400;
+  bottom:calc(100% + 8px);right:0;left:auto;transform:none;
+  background:#1e1e28;border:1px solid var(--border);
+  color:var(--text);font-size:12px;line-height:1.6;
+  padding:10px 14px;border-radius:8px;
+  min-width:220px;max-width:280px;white-space:normal;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+  pointer-events:none;text-align:left;
+}
+.kpi-tip:hover .tip-box{display:block}
+.kpi-tip .tip-box::after{
+  content:'';position:absolute;top:100%;right:6px;left:auto;transform:none;
+  border:6px solid transparent;border-top-color:#1e1e28;
+}
 
 /* ── Tooltip ─────────────────────────────────────────────── */
 .tippy{position:relative}
@@ -167,7 +198,7 @@ main{max-width:1320px;margin:0 auto;padding:28px 20px 0}
 .hbar-name{color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72%}
 .hbar-val{color:var(--gold);font-weight:700}
 .hbar-track{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
-.hbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s ease}
+.hbar-fill{height:100%;border-radius:3px;transition:width .6s ease}
 
 /* ── Origin list ─────────────────────────────────────────── */
 .origin-list{display:flex;flex-direction:column;gap:10px}
@@ -266,9 +297,18 @@ const ORIGIN_COLORS = {
 };
 
 const PRODUCT_PALETTE = [
-  "#c9a84c","#e8c97a","#a0784a","#d4b483","#8a6a3a",
-  "#e0c060","#b89040","#f0d080","#907030","#c0a060"
+  "#c9a84c","#6c9fff","#f97171","#4dd9ac","#b57bee",
+  "#f59e42","#5ecfea","#f472b6","#a3e635","#fb923c",
+  "#818cf8","#34d399"
 ];
+const _productColorMap = {};
+function productColor(name){
+  if(!_productColorMap[name]){
+    const idx = Object.keys(_productColorMap).length % PRODUCT_PALETTE.length;
+    _productColorMap[name] = PRODUCT_PALETTE[idx];
+  }
+  return _productColorMap[name];
+}
 
 // ══════════════════════════════════════════════════════
 // STATE
@@ -545,9 +585,9 @@ function buildProductCard(byProduct){
         <div class="hbar-item${_activeProduct===name?" active":""}" data-product="${esc(name)}">
           <div class="hbar-meta">
             <span class="hbar-name" title="${esc(name)}">${esc(name)}</span>
-            <span class="hbar-val">${fmt(val)}</span>
+            <span class="hbar-val" style="color:${productColor(name)}">${fmt(val)}</span>
           </div>
-          <div class="hbar-track"><div class="hbar-fill" style="width:${val/max*100}%"></div></div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:${val/max*100}%;background:${productColor(name)}"></div></div>
         </div>
       `).join("")||'<div style="color:var(--muted);font-size:12px">Sem dados</div>'}
     </div>
@@ -664,7 +704,7 @@ function showMonthTooltip(nativeEvt,monthKey,productMap){
 
   document.getElementById("mt-title").textContent=formatMonth(monthKey);
 
-  const colors=entries.map((_,i)=>PRODUCT_PALETTE[i%PRODUCT_PALETTE.length]);
+  const colors=entries.map(([name])=>productColor(name));
   const canvas=document.getElementById("mt-canvas");
 
   if(_mtChart){try{_mtChart.destroy()}catch(e){}_mtChart=null;}
