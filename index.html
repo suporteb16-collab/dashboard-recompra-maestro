@@ -5,368 +5,233 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jornada do Comprador · Maestro</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ── Reset & Base ─────────────────────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── Reset ───────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-  :root {
-    --bg:        #0d0f14;
-    --surface:   #151820;
-    --surface2:  #1c2030;
-    --border:    #252a3a;
-    --accent:    #6c63ff;
-    --accent2:   #a78bfa;
-    --green:     #22d3a5;
-    --yellow:    #fbbf24;
-    --red:       #f87171;
-    --text:      #e2e8f0;
-    --muted:     #64748b;
-    --radius:    12px;
-    --shadow:    0 4px 24px rgba(0,0,0,.4);
-  }
+:root{
+  --bg:        #0a0a0b;
+  --surface:   #111114;
+  --surface2:  #18181d;
+  --border:    #2a2a35;
+  --gold:      #c9a84c;
+  --gold2:     #e8c97a;
+  --gold-dim:  rgba(201,168,76,.12);
+  --cream:     #f5efe0;
+  --muted:     #5a5a6e;
+  --text:      #e8e4d8;
+  --green:     #22d3a5;
+  --red:       #f87171;
+  --radius:    10px;
+  --font-d:    'Cormorant Garamond', Georgia, serif;
+  --font-b:    'Inter', system-ui, sans-serif;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    padding-bottom: 48px;
-  }
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);min-height:100vh;padding-bottom:60px}
 
-  /* ── Header ──────────────────────────────────────────────── */
-  header {
-    background: linear-gradient(135deg, #0d0f14 0%, #151c30 100%);
-    border-bottom: 1px solid var(--border);
-    padding: 20px 24px 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(12px);
-  }
+/* ── Header ─────────────────────────────────────────────── */
+header{
+  background:linear-gradient(180deg,#0d0d10 0%,rgba(10,10,11,.95) 100%);
+  border-bottom:1px solid #2a2a35;
+  padding:18px 28px;
+  position:sticky;top:0;z-index:200;
+  backdrop-filter:blur(16px);
+}
+.header-inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-weight:700;font-size:18px;color:#0a0a0b;
+  flex-shrink:0;
+}
+.logo-title{font-family:var(--font-d);font-size:18px;font-weight:600;color:var(--gold2);letter-spacing:.02em}
+.logo-sub{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+#last-update{font-size:11px;color:var(--muted);background:var(--surface2);border:1px solid var(--border);padding:5px 12px;border-radius:20px}
 
-  .header-inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
+/* ── Main ────────────────────────────────────────────────── */
+main{max-width:1320px;margin:0 auto;padding:28px 20px 0}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+/* ── Section label ───────────────────────────────────────── */
+.section-label{
+  font-family:var(--font-d);font-size:22px;font-weight:600;
+  color:var(--gold2);letter-spacing:.03em;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
 
-  .logo-mark {
-    width: 36px; height: 36px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 16px; color: #fff;
-    flex-shrink: 0;
-  }
+/* ── Filters ─────────────────────────────────────────────── */
+.filters{
+  display:flex;flex-wrap:wrap;gap:12px;margin-bottom:28px;
+  padding:18px 20px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius);
+  align-items:flex-end;
+}
+.filter-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:150px}
+.filter-label{font-size:10px;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.08em}
+.filter-group input[type="date"],
+.filter-group select{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);padding:9px 12px;border-radius:8px;font-size:13px;
+  font-family:var(--font-b);width:100%;cursor:pointer;
+  appearance:none;-webkit-appearance:none;
+  transition:border-color .2s;
+}
+.filter-group input[type="date"]:focus,
+.filter-group select:focus{outline:none;border-color:var(--gold)}
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:'▾';position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--gold);font-size:12px;pointer-events:none;
+}
+.btn-reset{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:9px 18px;border-radius:8px;font-size:12px;cursor:pointer;
+  transition:all .2s;white-space:nowrap;font-family:var(--font-b);
+  align-self:flex-end;
+}
+.btn-reset:hover{border-color:var(--gold);color:var(--gold)}
 
-  .logo-text { line-height: 1.2; }
-  .logo-title { font-size: 15px; font-weight: 700; color: var(--text); }
-  .logo-sub   { font-size: 11px; color: var(--muted); }
+/* ── KPI Grid — 2 rows × 5 ──────────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:28px}
+.kpi-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px 16px;
+  position:relative;overflow:hidden;cursor:default;
+  transition:border-color .25s,transform .2s;
+}
+.kpi-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.kpi-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--kpi-accent,var(--gold));
+}
+.kpi-label{font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.3;letter-spacing:.02em}
+.kpi-value{
+  font-family:var(--font-d);font-size:30px;font-weight:700;
+  color:var(--kpi-accent,var(--gold2));line-height:1;
+}
+.kpi-sub{font-size:10px;color:var(--muted);margin-top:7px}
+.kpi-tip{
+  position:absolute;top:10px;right:10px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--muted);font-size:9px;display:flex;align-items:center;justify-content:center;
+  cursor:help;
+}
 
-  #last-update {
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
+/* ── Tooltip ─────────────────────────────────────────────── */
+.tippy{position:relative}
+.tippy .tip-box{
+  display:none;position:absolute;z-index:300;
+  bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  background:#1e1e28;border:1px solid var(--border);
+  color:var(--text);font-size:12px;line-height:1.5;
+  padding:10px 14px;border-radius:8px;white-space:nowrap;
+  min-width:200px;max-width:280px;white-space:normal;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+  pointer-events:none;
+}
+.tippy:hover .tip-box,.tippy:focus .tip-box{display:block}
+.tip-box::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:6px solid transparent;border-top-color:#1e1e28;
+}
 
-  /* ── Main layout ─────────────────────────────────────────── */
-  main {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 24px 16px 0;
-  }
+/* ── Charts grid ─────────────────────────────────────────── */
+.charts-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-bottom:28px}
+.chart-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:22px;
+  transition:border-color .25s;
+}
+.chart-card:hover{border-color:rgba(201,168,76,.3)}
+.chart-card.col-8{grid-column:span 8}
+.chart-card.col-6{grid-column:span 6}
+.chart-card.col-12{grid-column:span 12}
+.chart-title{
+  font-family:var(--font-d);font-size:17px;font-weight:600;
+  color:var(--gold2);margin-bottom:3px;
+  display:flex;align-items:center;gap:8px;
+}
+.chart-sub{font-size:11px;color:var(--muted);margin-bottom:18px}
+.chart-wrap{position:relative;width:100%}
 
-  /* ── Filters ─────────────────────────────────────────────── */
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 24px;
-    padding: 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-  }
+/* ── Hbar (produto) ──────────────────────────────────────── */
+.hbar-list{display:flex;flex-direction:column;gap:12px}
+.hbar-item{cursor:pointer;border-radius:6px;padding:4px 6px;transition:background .2s}
+.hbar-item:hover,.hbar-item.active{background:var(--gold-dim)}
+.hbar-meta{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px}
+.hbar-name{color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72%}
+.hbar-val{color:var(--gold);font-weight:700}
+.hbar-track{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s ease}
 
-  .filter-group {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-    min-width: 140px;
-  }
+/* ── Origin list ─────────────────────────────────────────── */
+.origin-list{display:flex;flex-direction:column;gap:10px}
+.origin-item{display:flex;align-items:center;gap:10px;font-size:12px;cursor:pointer;border-radius:6px;padding:4px 6px;transition:background .2s}
+.origin-item:hover,.origin-item.active{background:var(--gold-dim)}
+.origin-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.origin-name{flex:1;color:var(--text)}
+.origin-track{flex:2;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.origin-fill{height:100%;border-radius:3px}
+.origin-count{font-weight:700;color:var(--gold2);width:32px;text-align:right}
+.origin-pct{color:var(--muted);width:34px;text-align:right}
 
-  .filter-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .06em;
-  }
+/* ── Month tooltip (rosca) ───────────────────────────────── */
+#month-tooltip{
+  display:none;position:fixed;z-index:500;
+  background:#1a1a22;border:1px solid var(--border);
+  border-radius:12px;padding:16px;
+  box-shadow:0 12px 40px rgba(0,0,0,.6);
+  min-width:200px;
+}
+#month-tooltip canvas{display:block;margin:0 auto}
+#month-tooltip .mt-title{font-family:var(--font-d);font-size:15px;color:var(--gold2);text-align:center;margin-bottom:10px}
+#month-tooltip .mt-legend{margin-top:10px;font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:4px;max-height:120px;overflow-y:auto}
+#month-tooltip .mt-legend span{display:flex;align-items:center;gap:6px}
+#month-tooltip .mt-legend i{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
 
-  .filter-group select,
-  .filter-group input[type="date"] {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    width: 100%;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-  }
+/* ── Active filter tag ───────────────────────────────────── */
+.active-filter-bar{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;min-height:0}
+.filter-tag{
+  background:var(--gold-dim);border:1px solid var(--gold);
+  color:var(--gold2);font-size:11px;padding:3px 10px 3px 8px;
+  border-radius:20px;display:flex;align-items:center;gap:6px;cursor:pointer;
+}
+.filter-tag:hover{background:rgba(201,168,76,.2)}
+.filter-tag-x{font-size:13px;line-height:1;color:var(--gold)}
 
-  .filter-group select:focus,
-  .filter-group input:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
+/* ── Loading ─────────────────────────────────────────────── */
+.loading{display:flex;align-items:center;justify-content:center;height:240px;color:var(--muted);font-size:13px;flex-direction:column;gap:12px}
+.spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  .btn-reset {
-    align-self: flex-end;
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all .2s;
-    white-space: nowrap;
-  }
-  .btn-reset:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* ── KPI Cards ───────────────────────────────────────────── */
-  .section-title {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    margin-bottom: 12px;
-  }
-
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-
-  .kpi-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color .2s;
-  }
-  .kpi-card:hover { border-color: var(--accent); }
-
-  .kpi-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--kpi-color, var(--accent));
-  }
-
-  .kpi-label {
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-
-  .kpi-value {
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--kpi-color, var(--text));
-    line-height: 1;
-  }
-
-  .kpi-sub {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 6px;
-  }
-
-  /* ── Charts grid ─────────────────────────────────────────── */
-  .charts-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 16px;
-    margin-bottom: 28px;
-  }
-
-  .chart-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-  }
-
-  .chart-card.col-8  { grid-column: span 8; }
-  .chart-card.col-4  { grid-column: span 4; }
-  .chart-card.col-6  { grid-column: span 6; }
-  .chart-card.col-12 { grid-column: span 12; }
-
-  .chart-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-  .chart-sub {
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-
-  .chart-wrap {
-    position: relative;
-    width: 100%;
-  }
-
-  /* ── Horizontal bar (produto) ─────────────────────────────── */
-  .hbar-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .hbar-item { }
-  .hbar-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    margin-bottom: 4px;
-  }
-  .hbar-name { color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
-  .hbar-val  { color: var(--accent2); font-weight: 700; }
-  .hbar-track {
-    height: 6px;
-    background: var(--surface2);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .hbar-fill {
-    height: 100%;
-    border-radius: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    transition: width .6s ease;
-  }
-
-  /* ── Origin pills ────────────────────────────────────────── */
-  .origin-list { display: flex; flex-direction: column; gap: 8px; }
-  .origin-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-  }
-  .origin-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .origin-name { flex: 1; color: var(--text); }
-  .origin-count { font-weight: 700; color: var(--accent2); }
-  .origin-pct { color: var(--muted); width: 36px; text-align: right; }
-  .origin-track {
-    width: 80px;
-    height: 4px;
-    background: var(--surface2);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .origin-fill { height: 100%; border-radius: 2px; }
-
-  /* ── Funnel ──────────────────────────────────────────────── */
-  .funnel { display: flex; flex-direction: column; gap: 6px; }
-  .funnel-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .funnel-label {
-    width: 60px;
-    font-size: 11px;
-    color: var(--muted);
-    text-align: right;
-    flex-shrink: 0;
-  }
-  .funnel-bar-wrap { flex: 1; }
-  .funnel-bar {
-    height: 28px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    transition: width .6s ease;
-    min-width: 40px;
-  }
-  .funnel-count { width: 48px; text-align: right; font-size: 12px; font-weight: 700; color: var(--text); }
-
-  /* ── Loading / empty ─────────────────────────────────────── */
-  .loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
-    color: var(--muted);
-    font-size: 13px;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin .7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ── Responsive ──────────────────────────────────────────── */
-  @media (max-width: 900px) {
-    .chart-card.col-8,
-    .chart-card.col-4,
-    .chart-card.col-6 { grid-column: span 12; }
-  }
-
-  @media (max-width: 600px) {
-    header { padding: 12px 16px; }
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    .kpi-value { font-size: 22px; }
-    .filters { flex-direction: column; }
-  }
+/* ── Responsive ──────────────────────────────────────────── */
+@media(max-width:1100px){
+  .kpi-grid{grid-template-columns:repeat(5,1fr)}
+}
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-card.col-8,.chart-card.col-6{grid-column:span 12}
+}
+@media(max-width:540px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .kpi-value{font-size:24px}
+  .filters{flex-direction:column}
+  header{padding:12px 16px}
+}
 </style>
 </head>
 <body>
 
-<!-- ── HEADER ── -->
 <header>
   <div class="header-inner">
     <div class="logo">
       <div class="logo-mark">M</div>
-      <div class="logo-text">
+      <div>
         <div class="logo-title">Maestro · Jornada do Comprador</div>
         <div class="logo-sub">Dashboard de Recompra</div>
       </div>
@@ -375,7 +240,12 @@
   </div>
 </header>
 
-<!-- ── MAIN ── -->
+<div id="month-tooltip">
+  <div class="mt-title" id="mt-title"></div>
+  <canvas id="mt-canvas" width="160" height="160"></canvas>
+  <div class="mt-legend" id="mt-legend"></div>
+</div>
+
 <main id="app">
   <div class="loading" id="global-loading">
     <div class="spinner"></div>
@@ -384,156 +254,151 @@
 </main>
 
 <script>
-// ══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // CONFIG
-// ══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 const DATA_URL = "./data/data.json";
-const REFRESH_MS = 60 * 60 * 1000; // 1 hora
+const REFRESH_MS = 60 * 60 * 1000;
 
 const ORIGIN_COLORS = {
-  "Meta Ads":   "#1877f2",
-  "Instagram":  "#e1306c",
-  "YouTube":    "#ff0000",
-  "E-mail":     "#22d3a5",
-  "WhatsApp":   "#25d366",
-  "Sem origem": "#64748b",
-  "Outros":     "#a78bfa",
+  "Meta Ads":"#1877f2","Instagram":"#e1306c","YouTube":"#ff0000",
+  "E-mail":"#22d3a5","WhatsApp":"#25d366","Sem origem":"#5a5a6e","Outros":"#a78bfa"
 };
 
-const FUNNEL_COLORS = ["#6c63ff","#a78bfa","#22d3a5","#fbbf24"];
+const PRODUCT_PALETTE = [
+  "#c9a84c","#e8c97a","#a0784a","#d4b483","#8a6a3a",
+  "#e0c060","#b89040","#f0d080","#907030","#c0a060"
+];
 
-// ══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // STATE
-// ══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 let _data = null;
 let _charts = {};
-let _filters = { dateFrom: "", dateTo: "", product: "", origin: "" };
+let _activeProduct = null;
+let _activeOrigin  = null;
+let _filters = { dateFrom:"", dateTo:"", product:"", origin:"" };
+let _mtChart = null;
 
-// ══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // FETCH
-// ══════════════════════════════════════════════════════════════════════════════
-async function fetchData() {
-  const res = await fetch(DATA_URL + "?t=" + Date.now());
-  if (!res.ok) throw new Error("Falha ao carregar dados");
-  return res.json();
+// ══════════════════════════════════════════════════════
+async function fetchData(){
+  const r = await fetch(DATA_URL+"?t="+Date.now());
+  if(!r.ok) throw new Error("Falha ao carregar dados");
+  return r.json();
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-// FILTER ENGINE (client-side sobre raw[])
-// ══════════════════════════════════════════════════════════════════════════════
-function applyFilters(data) {
-  if (!data.raw || data.raw.length === 0) return data;
+// ══════════════════════════════════════════════════════
+// FILTER ENGINE
+// ══════════════════════════════════════════════════════
+function applyFilters(data){
+  const {dateFrom,dateTo,product,origin} = _filters;
+  const hasF = dateFrom||dateTo||product||origin;
+  if(!hasF && !_activeProduct && !_activeOrigin) return data;
 
-  const { dateFrom, dateTo, product, origin } = _filters;
-  const hasFilter = dateFrom || dateTo || product || origin;
-  if (!hasFilter) return data;
+  const prod = _activeProduct || product;
+  const ori  = _activeOrigin  || origin;
 
-  // Filtrar raw por compras que passam nos critérios
-  const filtered = data.raw.map(buyer => {
-    const purchases = buyer.purchases.filter(p => {
-      if (dateFrom && p.date < dateFrom) return false;
-      if (dateTo   && p.date > dateTo)   return false;
-      if (product  && p.product !== product) return false;
-      if (origin   && p.origin  !== origin)  return false;
+  const filtered = data.raw.map(buyer=>{
+    const purchases = buyer.purchases.filter(p=>{
+      if(dateFrom && p.date < dateFrom) return false;
+      if(dateTo   && p.date > dateTo)   return false;
+      if(prod     && p.product !== prod) return false;
+      if(ori      && p.origin  !== ori)  return false;
       return true;
     });
-    return { ...buyer, purchases, count: purchases.length, ltv: purchases.reduce((s, p) => s + p.revenue, 0) };
-  }).filter(b => b.purchases.length > 0);
+    return {...buyer,purchases,count:purchases.length,ltv:purchases.reduce((s,p)=>s+p.revenue,0)};
+  }).filter(b=>b.purchases.length>0);
 
-  // Recalcular KPIs e charts a partir do filtrado
-  return recompute(filtered, data);
+  return recompute(filtered,data);
 }
 
-function recompute(filtered, original) {
-  const buyers_by_count = {};
-  filtered.forEach(b => { buyers_by_count[b.count] = (buyers_by_count[b.count] || 0) + 1; });
-
-  const rebuyers = filtered.filter(b => b.count > 1);
-  const days12 = [], days1last = [];
-
-  rebuyers.forEach(b => {
-    const dates = b.purchases.map(p => p.date).sort();
-    if (dates.length >= 2) {
-      days12.push(daysBetween(dates[0], dates[1]));
-      days1last.push(daysBetween(dates[0], dates[dates.length - 1]));
+function recompute(filtered,original){
+  const byCount={};
+  filtered.forEach(b=>{byCount[b.count]=(byCount[b.count]||0)+1});
+  const rebuyers=filtered.filter(b=>b.count>1);
+  const days12=[],days1last=[];
+  rebuyers.forEach(b=>{
+    const dates=b.purchases.map(p=>p.date).sort();
+    if(dates.length>=2){
+      days12.push(daysBetween(dates[0],dates[1]));
+      days1last.push(daysBetween(dates[0],dates[dates.length-1]));
     }
   });
-
-  const avg = arr => arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0;
-
-  // rebuy_by_month
-  const byMonth = {};
-  rebuyers.forEach(b => b.purchases.slice(1).forEach(p => {
-    const k = p.date.slice(0,7);
-    byMonth[k] = (byMonth[k]||0) + 1;
+  const avg=a=>a.length?Math.round(a.reduce((s,v)=>s+v,0)/a.length):0;
+  const byMonth={},byOrigin={},byProduct={};
+  rebuyers.forEach(b=>b.purchases.slice(1).forEach(p=>{
+    const k=p.date.slice(0,7);
+    byMonth[k]=(byMonth[k]||0)+1;
+    byOrigin[p.origin]=(byOrigin[p.origin]||0)+1;
+    byProduct[p.product]=(byProduct[p.product]||0)+1;
   }));
-
-  // rebuy_by_origin
-  const byOrigin = {};
-  rebuyers.forEach(b => b.purchases.slice(1).forEach(p => {
-    byOrigin[p.origin] = (byOrigin[p.origin]||0)+1;
-  }));
-
-  // rebuy_by_product
-  const byProduct = {};
-  rebuyers.forEach(b => b.purchases.slice(1).forEach(p => {
-    byProduct[p.product] = (byProduct[p.product]||0)+1;
-  }));
-  const topProduct = Object.entries(byProduct).sort((a,b)=>b[1]-a[1])[0]?.[0] || "—";
-
-  const totalLTV = filtered.reduce((s,b)=>s+b.ltv,0);
-  const avgLTV = filtered.length ? totalLTV/filtered.length : 0;
-
-  return {
+  const topP=Object.entries(byProduct).sort((a,b)=>b[1]-a[1])[0]?.[0]||"—";
+  const totalLTV=filtered.reduce((s,b)=>s+b.ltv,0);
+  const avgLTV=filtered.length?totalLTV/filtered.length:0;
+  return{
     ...original,
-    kpis: {
-      total_buyers:       filtered.length,
-      buyers_1x:          buyers_by_count[1] || 0,
-      buyers_2x:          buyers_by_count[2] || 0,
-      buyers_3x:          buyers_by_count[3] || 0,
-      buyers_4x_plus:     Object.entries(buyers_by_count).filter(([k])=>+k>=4).reduce((s,[,v])=>s+v,0),
-      total_rebuyers:     rebuyers.length,
-      total_repurchases:  rebuyers.reduce((s,b)=>s+b.count-1,0),
-      avg_ltv:            Math.round(avgLTV * 100)/100,
-      avg_days_1_to_2:    avg(days12),
-      avg_days_1_to_last: avg(days1last),
-      top_rebuy_product:  topProduct,
+    kpis:{
+      total_buyers:filtered.length,
+      buyers_1x:byCount[1]||0,
+      buyers_2x:byCount[2]||0,
+      buyers_3x:byCount[3]||0,
+      buyers_4x_plus:Object.entries(byCount).filter(([k])=>+k>=4).reduce((s,[,v])=>s+v,0),
+      total_rebuyers:rebuyers.length,
+      total_repurchases:rebuyers.reduce((s,b)=>s+b.count-1,0),
+      avg_ltv:Math.round(avgLTV*100)/100,
+      avg_days_1_to_2:avg(days12),
+      avg_days_1_to_last:avg(days1last),
+      top_rebuy_product:topP,
     },
-    charts: {
-      rebuy_by_month:   Object.fromEntries(Object.entries(byMonth).sort()),
-      rebuy_by_origin:  byOrigin,
-      rebuy_by_product: Object.fromEntries(Object.entries(byProduct).sort((a,b)=>b[1]-a[1])),
-      buyers_by_month:  original.charts.buyers_by_month,
+    charts:{
+      rebuy_by_month:Object.fromEntries(Object.entries(byMonth).sort()),
+      rebuy_by_origin:byOrigin,
+      rebuy_by_product:Object.fromEntries(Object.entries(byProduct).sort((a,b)=>b[1]-a[1])),
+      buyers_by_month:original.charts.buyers_by_month,
     },
+    _monthProductMap: buildMonthProductMap(rebuyers),
   };
 }
 
-function daysBetween(a, b) {
-  return Math.abs((new Date(b) - new Date(a)) / 86400000);
+function buildMonthProductMap(rebuyers){
+  const map={};
+  rebuyers.forEach(b=>b.purchases.slice(1).forEach(p=>{
+    const k=p.date.slice(0,7);
+    if(!map[k]) map[k]={};
+    map[k][p.product]=(map[k][p.product]||0)+1;
+  }));
+  return map;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
+function daysBetween(a,b){return Math.abs((new Date(b)-new Date(a))/86400000)}
+
+// ══════════════════════════════════════════════════════
 // RENDER
-// ══════════════════════════════════════════════════════════════════════════════
-function render(data) {
-  const app = document.getElementById("app");
-  app.innerHTML = "";
-
-  const d = applyFilters(data);
-
-  renderFilters(app, data);
-  renderKPIs(app, d.kpis);
-  renderCharts(app, d);
+// ══════════════════════════════════════════════════════
+function render(data){
+  const app=document.getElementById("app");
+  app.innerHTML="";
+  const d=applyFilters(data);
+  renderFilters(app,data);
+  renderActiveTags(app);
+  renderKPIs(app,d.kpis);
+  renderCharts(app,d);
 }
 
-// ── Filters ────────────────────────────────────────────────────────────────
-function renderFilters(container, data) {
-  const products = data.filters?.products || [];
-  const origins  = data.filters?.origins  || [];
+// ── Filters ───────────────────────────────────────────
+function renderFilters(container,data){
+  const products=data.filters?.products||[];
+  const origins=data.filters?.origins||[];
 
-  const el = document.createElement("div");
-  el.className = "filters";
-  el.innerHTML = `
+  // default year
+  const y=new Date().getFullYear();
+  if(!_filters.dateFrom) _filters.dateFrom=`${y}-01-01`;
+  if(!_filters.dateTo)   _filters.dateTo=`${y}-12-31`;
+
+  const el=mk("div","filters");
+  el.innerHTML=`
     <div class="filter-group">
       <span class="filter-label">De</span>
       <input type="date" id="f-date-from" value="${_filters.dateFrom}">
@@ -544,266 +409,333 @@ function renderFilters(container, data) {
     </div>
     <div class="filter-group">
       <span class="filter-label">Produto</span>
-      <select id="f-product">
-        <option value="">Todos</option>
-        ${products.map(p => `<option value="${esc(p)}" ${_filters.product===p?"selected":""}>${esc(p)}</option>`).join("")}
-      </select>
+      <div class="select-wrap">
+        <select id="f-product">
+          <option value="">Todos os produtos</option>
+          ${products.map(p=>`<option value="${esc(p)}" ${_filters.product===p?"selected":""}>${esc(p)}</option>`).join("")}
+        </select>
+      </div>
     </div>
     <div class="filter-group">
       <span class="filter-label">Origem</span>
-      <select id="f-origin">
-        <option value="">Todas</option>
-        ${origins.map(o => `<option value="${esc(o)}" ${_filters.origin===o?"selected":""}>${esc(o)}</option>`).join("")}
-      </select>
+      <div class="select-wrap">
+        <select id="f-origin">
+          <option value="">Todas as origens</option>
+          ${origins.map(o=>`<option value="${esc(o)}" ${_filters.origin===o?"selected":""}>${esc(o)}</option>`).join("")}
+        </select>
+      </div>
     </div>
     <button class="btn-reset" id="btn-reset">↺ Limpar</button>
   `;
   container.appendChild(el);
 
-  const update = () => {
-    _filters.dateFrom = document.getElementById("f-date-from").value;
-    _filters.dateTo   = document.getElementById("f-date-to").value;
-    _filters.product  = document.getElementById("f-product").value;
-    _filters.origin   = document.getElementById("f-origin").value;
+  const upd=()=>{
+    _filters.dateFrom=document.getElementById("f-date-from").value;
+    _filters.dateTo  =document.getElementById("f-date-to").value;
+    _filters.product =document.getElementById("f-product").value;
+    _filters.origin  =document.getElementById("f-origin").value;
+    _activeProduct=null;_activeOrigin=null;
     render(_data);
   };
-
-  el.querySelectorAll("select, input").forEach(e => e.addEventListener("change", update));
-  el.querySelector("#btn-reset").addEventListener("click", () => {
-    _filters = { dateFrom:"", dateTo:"", product:"", origin:"" };
+  el.querySelectorAll("select,input").forEach(e=>e.addEventListener("change",upd));
+  el.querySelector("#btn-reset").addEventListener("click",()=>{
+    _filters={dateFrom:`${new Date().getFullYear()}-01-01`,dateTo:`${new Date().getFullYear()}-12-31`,product:"",origin:""};
+    _activeProduct=null;_activeOrigin=null;
     render(_data);
   });
 }
 
-// ── KPI Cards ──────────────────────────────────────────────────────────────
-function renderKPIs(container, kpis) {
-  const section = mk("div");
-  section.innerHTML = `<div class="section-title">Visão geral</div>`;
+function renderActiveTags(container){
+  const tags=[];
+  if(_activeProduct) tags.push({label:`Produto: ${_activeProduct}`,clear:()=>{_activeProduct=null;render(_data)}});
+  if(_activeOrigin)  tags.push({label:`Origem: ${_activeOrigin}`,clear:()=>{_activeOrigin=null;render(_data)}});
+  if(!tags.length) return;
+  const bar=mk("div","active-filter-bar");
+  tags.forEach(t=>{
+    const tag=mk("div","filter-tag");
+    tag.innerHTML=`${esc(t.label)}<span class="filter-tag-x">×</span>`;
+    tag.querySelector(".filter-tag-x").addEventListener("click",t.clear);
+    bar.appendChild(tag);
+  });
+  container.appendChild(bar);
+}
 
-  const grid = mk("div", "kpi-grid");
+// ── KPIs ──────────────────────────────────────────────
+function renderKPIs(container,kpis){
+  const wrap=mk("div");
+  wrap.innerHTML=`<div class="section-label">Visão Geral</div>`;
+  const grid=mk("div","kpi-grid");
 
-  const cards = [
-    { label:"Compradores únicos",       value: fmt(kpis.total_buyers),       color:"#6c63ff", sub:"Total com ≥1 compra" },
-    { label:"Compradores 2×",           value: fmt(kpis.buyers_2x),           color:"#a78bfa", sub:"Exatamente 2 compras" },
-    { label:"Compradores 3×",           value: fmt(kpis.buyers_3x),           color:"#22d3a5", sub:"Exatamente 3 compras" },
-    { label:"Compradores 4×+",          value: fmt(kpis.buyers_4x_plus),      color:"#fbbf24", sub:"4 ou mais compras" },
-    { label:"Total recompradores",      value: fmt(kpis.total_rebuyers),      color:"#6c63ff", sub:"Compraram 2× ou mais" },
-    { label:"Total de recompras",       value: fmt(kpis.total_repurchases),   color:"#a78bfa", sub:"Pedidos a partir da 2ª compra" },
-    { label:"LTV médio",                value:"R$ "+fmtBRL(kpis.avg_ltv),    color:"#22d3a5", sub:"Por comprador único" },
-    { label:"Dias até 2ª compra",       value: kpis.avg_days_1_to_2+"d",     color:"#fbbf24", sub:"Média entre 1ª e 2ª compra" },
-    { label:"Dias até última compra",   value: kpis.avg_days_1_to_last+"d",  color:"#f87171", sub:"Média entre 1ª e última" },
-    { label:"Produto + recompras",      value:"",                             color:"#6c63ff", sub: kpis.top_rebuy_product, big: false },
+  const cards=[
+    {label:"Compradores únicos",    value:fmt(kpis.total_buyers),    accent:"#c9a84c", sub:"Total com ≥1 compra paid",            tip:"Emails únicos com ao menos uma compra confirmada (status paid)."},
+    {label:"Compradores 2×",        value:fmt(kpis.buyers_2x),       accent:"#e8c97a", sub:"Compraram exatamente 2 vezes",         tip:"Clientes que realizaram exatamente 2 compras em toda a base."},
+    {label:"Compradores 3×",        value:fmt(kpis.buyers_3x),       accent:"#22d3a5", sub:"Compraram exatamente 3 vezes",         tip:"Clientes que realizaram exatamente 3 compras na base."},
+    {label:"Compradores 4×+",       value:fmt(kpis.buyers_4x_plus),  accent:"#a78bfa", sub:"4 ou mais compras",                   tip:"Clientes com 4 ou mais compras — seu núcleo de fãs fiéis."},
+    {label:"Total recompradores",   value:fmt(kpis.total_rebuyers),  accent:"#c9a84c", sub:"Compraram 2× ou mais",                tip:"Quantos compradores únicos voltaram a comprar pelo menos uma vez."},
+    {label:"Total de recompras",    value:fmt(kpis.total_repurchases),accent:"#e8c97a",sub:"Pedidos a partir da 2ª compra",       tip:"Soma de todas as compras a partir da segunda, por cliente."},
+    {label:"LTV médio",             value:"R$ "+fmtBRL(kpis.avg_ltv),accent:"#22d3a5",sub:"Por comprador único",                 tip:"Receita total gerada dividida pelo nº de compradores únicos."},
+    {label:"Dias até 2ª compra",    value:kpis.avg_days_1_to_2+"d", accent:"#f59e0b", sub:"Média 1ª → 2ª compra",               tip:"Quantos dias em média o cliente leva para voltar a comprar pela primeira vez."},
+    {label:"Dias até última compra",value:kpis.avg_days_1_to_last+"d",accent:"#f87171",sub:"Média 1ª → última compra",          tip:"Janela total de relacionamento: do primeiro ao último pedido."},
+    {label:"Produto + recompras",   value:"🏆",                      accent:"#c9a84c", sub:kpis.top_rebuy_product,              tip:"Produto mais escolhido nas recompras (2ª compra em diante)."},
   ];
 
-  cards.forEach(c => {
-    const card = mk("div", "kpi-card");
-    card.style.setProperty("--kpi-color", c.color);
-    card.innerHTML = `
+  cards.forEach(c=>{
+    const card=mk("div","kpi-card tippy");
+    card.style.setProperty("--kpi-accent",c.accent);
+    card.innerHTML=`
       <div class="kpi-label">${c.label}</div>
-      <div class="kpi-value" style="font-size:${c.value?"":""}">${c.value || "🏆"}</div>
-      <div class="kpi-sub">${c.sub}</div>
+      <div class="kpi-value">${c.value}</div>
+      <div class="kpi-sub">${esc(c.sub)}</div>
+      <div class="kpi-tip" tabindex="0">?<div class="tip-box">${esc(c.tip)}</div></div>
     `;
     grid.appendChild(card);
   });
 
-  section.appendChild(grid);
-  container.appendChild(section);
+  wrap.appendChild(grid);
+  container.appendChild(wrap);
 }
 
-// ── Charts ─────────────────────────────────────────────────────────────────
-function renderCharts(container, d) {
-  const grid = mk("div","charts-grid");
+// ── Charts ────────────────────────────────────────────
+function renderCharts(container,d){
+  const wrap=mk("div");
+  wrap.innerHTML=`<div class="section-label">Análise de Recompra</div>`;
+  const grid=mk("div","charts-grid");
 
-  // 1. Recompras por mês (linha) — col-8
-  grid.appendChild(chartMonthLine(d.charts.rebuy_by_month));
+  grid.appendChild(buildMonthCard(d));
+  grid.appendChild(buildProductCard(d.charts.rebuy_by_product));
+  grid.appendChild(buildOriginCard(d.charts.rebuy_by_origin));
 
-  // 2. Funil de compradores — col-4
-  grid.appendChild(chartFunnel(d.kpis));
+  wrap.appendChild(grid);
+  container.appendChild(wrap);
 
-  // 3. Recompras por produto — col-6
-  grid.appendChild(chartProductBars(d.charts.rebuy_by_product));
-
-  // 4. Recompras por origem — col-6
-  grid.appendChild(chartOrigin(d.charts.rebuy_by_origin));
-
-  container.appendChild(grid);
-
-  // Inicializar Chart.js após DOM montado
-  requestAnimationFrame(() => initCharts(d));
+  requestAnimationFrame(()=>initCharts(d));
 }
 
-function chartMonthLine(byMonth) {
-  const card = mk("div","chart-card col-8");
-  card.innerHTML = `
-    <div class="chart-title">Recompras por mês</div>
-    <div class="chart-sub">Quantidade de recompras (2ª compra em diante) por mês de compra</div>
-    <div class="chart-wrap" style="height:220px"><canvas id="chart-month"></canvas></div>
-  `;
-  return card;
-}
-
-function chartFunnel(kpis) {
-  const card = mk("div","chart-card col-4");
-  const items = [
-    { label:"1×", count: kpis.buyers_1x,      pct: 100 },
-    { label:"2×", count: kpis.buyers_2x,      pct: kpis.buyers_1x ? Math.round(kpis.buyers_2x/kpis.total_buyers*100) : 0 },
-    { label:"3×", count: kpis.buyers_3x,      pct: kpis.buyers_1x ? Math.round(kpis.buyers_3x/kpis.total_buyers*100) : 0 },
-    { label:"4×+",count: kpis.buyers_4x_plus, pct: kpis.buyers_1x ? Math.round(kpis.buyers_4x_plus/kpis.total_buyers*100) : 0 },
-  ];
-  const max = kpis.total_buyers || 1;
-  card.innerHTML = `
-    <div class="chart-title">Frequência de compra</div>
-    <div class="chart-sub">Distribuição por número de compras</div>
-    <div class="funnel">
-      ${items.map((item,i)=>`
-        <div class="funnel-item">
-          <div class="funnel-label">${item.label}</div>
-          <div class="funnel-bar-wrap">
-            <div class="funnel-bar" style="background:${FUNNEL_COLORS[i]};width:${Math.max(item.count/max*100,4)}%">
-              ${item.pct}%
-            </div>
-          </div>
-          <div class="funnel-count">${fmt(item.count)}</div>
-        </div>
-      `).join("")}
+function buildMonthCard(d){
+  const card=mk("div","chart-card col-12");
+  card.innerHTML=`
+    <div class="chart-title">
+      Recompras por mês
+      <span class="tippy" style="cursor:help">
+        <span style="font-size:11px;color:var(--muted);font-family:var(--font-b);font-weight:400">ⓘ</span>
+        <div class="tip-box">Recompras (2ª compra em diante) por mês. Passe o mouse sobre um ponto para ver a distribuição por produto.</div>
+      </span>
     </div>
+    <div class="chart-sub">Evolução mensal · passe o mouse para ver o mix de produtos</div>
+    <div class="chart-wrap" style="height:240px"><canvas id="chart-month"></canvas></div>
   `;
   return card;
 }
 
-function chartProductBars(byProduct) {
-  const card = mk("div","chart-card col-6");
-  const entries = Object.entries(byProduct).slice(0,8);
-  const max = entries[0]?.[1] || 1;
-  card.innerHTML = `
-    <div class="chart-title">Recompras por produto</div>
-    <div class="chart-sub">Produtos mais escolhidos na 2ª compra em diante</div>
-    <div class="hbar-list">
+function buildProductCard(byProduct){
+  const card=mk("div","chart-card col-6");
+  const entries=Object.entries(byProduct).slice(0,10);
+  const max=entries[0]?.[1]||1;
+  const tipHtml=`
+    <div class="chart-title">
+      Recompras por produto
+      <span class="tippy" style="cursor:help">
+        <span style="font-size:11px;color:var(--muted);font-family:var(--font-b);font-weight:400">ⓘ</span>
+        <div class="tip-box">Produtos mais escolhidos na 2ª compra em diante. Clique em um produto para filtrar todos os gráficos.</div>
+      </span>
+    </div>
+    <div class="chart-sub">Clique para filtrar · top 10</div>
+    <div class="hbar-list" id="product-bars">
       ${entries.map(([name,val])=>`
-        <div class="hbar-item">
+        <div class="hbar-item${_activeProduct===name?" active":""}" data-product="${esc(name)}">
           <div class="hbar-meta">
             <span class="hbar-name" title="${esc(name)}">${esc(name)}</span>
             <span class="hbar-val">${fmt(val)}</span>
           </div>
           <div class="hbar-track"><div class="hbar-fill" style="width:${val/max*100}%"></div></div>
         </div>
-      `).join("") || '<div style="color:var(--muted);font-size:12px;padding:8px 0">Sem dados</div>'}
+      `).join("")||'<div style="color:var(--muted);font-size:12px">Sem dados</div>'}
     </div>
   `;
+  card.innerHTML=tipHtml;
+
+  card.querySelectorAll(".hbar-item").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const p=el.dataset.product;
+      _activeProduct=_activeProduct===p?null:p;
+      render(_data);
+    });
+  });
   return card;
 }
 
-function chartOrigin(byOrigin) {
-  const card = mk("div","chart-card col-6");
-  const entries = Object.entries(byOrigin).sort((a,b)=>b[1]-a[1]);
-  const total = entries.reduce((s,[,v])=>s+v,0) || 1;
-  card.innerHTML = `
-    <div class="chart-title">Recompras por canal de origem</div>
-    <div class="chart-sub">Canal atribuído à recompra (UTM/src)</div>
-    <div class="origin-list">
+function buildOriginCard(byOrigin){
+  const card=mk("div","chart-card col-6");
+  const entries=Object.entries(byOrigin).sort((a,b)=>b[1]-a[1]);
+  const total=entries.reduce((s,[,v])=>s+v,0)||1;
+  card.innerHTML=`
+    <div class="chart-title">
+      Recompras por canal
+      <span class="tippy" style="cursor:help">
+        <span style="font-size:11px;color:var(--muted);font-family:var(--font-b);font-weight:400">ⓘ</span>
+        <div class="tip-box">Canal atribuído à recompra via UTM/src. Clique em um canal para filtrar todos os gráficos.</div>
+      </span>
+    </div>
+    <div class="chart-sub">Clique para filtrar · atribuição por UTM/src</div>
+    <div class="origin-list" id="origin-list">
       ${entries.map(([name,val])=>`
-        <div class="origin-item">
-          <div class="origin-dot" style="background:${ORIGIN_COLORS[name]||"#64748b"}"></div>
+        <div class="origin-item${_activeOrigin===name?" active":""}" data-origin="${esc(name)}">
+          <div class="origin-dot" style="background:${ORIGIN_COLORS[name]||"#5a5a6e"}"></div>
           <div class="origin-name">${esc(name)}</div>
-          <div class="origin-track">
-            <div class="origin-fill" style="width:${val/total*100}%;background:${ORIGIN_COLORS[name]||"#64748b"}"></div>
-          </div>
+          <div class="origin-track"><div class="origin-fill" style="width:${val/total*100}%;background:${ORIGIN_COLORS[name]||"#5a5a6e"}"></div></div>
           <div class="origin-count">${fmt(val)}</div>
           <div class="origin-pct">${Math.round(val/total*100)}%</div>
         </div>
-      `).join("") || '<div style="color:var(--muted);font-size:12px">Sem dados</div>'}
+      `).join("")||'<div style="color:var(--muted);font-size:12px">Sem dados</div>'}
     </div>
   `;
+  card.querySelectorAll(".origin-item").forEach(el=>{
+    el.addEventListener("click",()=>{
+      const o=el.dataset.origin;
+      _activeOrigin=_activeOrigin===o?null:o;
+      render(_data);
+    });
+  });
   return card;
 }
 
-// ── Chart.js init ──────────────────────────────────────────────────────────
-function initCharts(d) {
+// ── Chart.js ──────────────────────────────────────────
+function initCharts(d){
   destroyCharts();
+  const monthEl=document.getElementById("chart-month");
+  if(!monthEl) return;
 
-  // Linha — recompras por mês
-  const monthEl = document.getElementById("chart-month");
-  if (monthEl) {
-    const labels = Object.keys(d.charts.rebuy_by_month).map(formatMonth);
-    const values = Object.values(d.charts.rebuy_by_month);
-    _charts.month = new Chart(monthEl, {
-      type: "line",
-      data: {
-        labels,
-        datasets: [{
-          label: "Recompras",
-          data: values,
-          borderColor: "#6c63ff",
-          backgroundColor: "rgba(108,99,255,.15)",
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: "#6c63ff",
-          pointRadius: 4,
-        }]
+  const labels=Object.keys(d.charts.rebuy_by_month).map(formatMonth);
+  const values=Object.values(d.charts.rebuy_by_month);
+  const monthKeys=Object.keys(d.charts.rebuy_by_month);
+  const monthProductMap=d._monthProductMap||{};
+
+  _charts.month=new Chart(monthEl,{
+    type:"line",
+    data:{
+      labels,
+      datasets:[{
+        label:"Recompras",
+        data:values,
+        borderColor:"#c9a84c",
+        backgroundColor:"rgba(201,168,76,.08)",
+        fill:true,tension:0.4,
+        pointBackgroundColor:"#c9a84c",
+        pointBorderColor:"#0a0a0b",
+        pointBorderWidth:2,
+        pointRadius:4,
+        pointHoverRadius:7,
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{enabled:false},
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { ticks: { color:"#64748b", font:{size:11} }, grid:{color:"#1c2030"} },
-          y: { ticks: { color:"#64748b", font:{size:11} }, grid:{color:"#1c2030"}, beginAtZero:true },
+      scales:{
+        x:{ticks:{color:"#5a5a6e",font:{size:11}},grid:{color:"#18181d"}},
+        y:{ticks:{color:"#5a5a6e",font:{size:11}},grid:{color:"#18181d"},beginAtZero:true},
+      },
+      onHover:(e,elements)=>{
+        if(elements.length){
+          const idx=elements[0].index;
+          const key=monthKeys[idx];
+          showMonthTooltip(e.native,key,monthProductMap[key]||{});
+        } else {
+          hideMonthTooltip();
         }
       }
-    });
-  }
+    }
+  });
 }
 
-function destroyCharts() {
-  Object.values(_charts).forEach(c => { try { c.destroy(); } catch(e){} });
-  _charts = {};
+function destroyCharts(){
+  Object.values(_charts).forEach(c=>{try{c.destroy()}catch(e){}});
+  _charts={};
+  if(_mtChart){try{_mtChart.destroy()}catch(e){}_mtChart=null;}
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
+// ── Month tooltip (rosca) ─────────────────────────────
+function showMonthTooltip(nativeEvt,monthKey,productMap){
+  const tt=document.getElementById("month-tooltip");
+  const entries=Object.entries(productMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  if(!entries.length){hideMonthTooltip();return;}
+
+  document.getElementById("mt-title").textContent=formatMonth(monthKey);
+
+  const colors=entries.map((_,i)=>PRODUCT_PALETTE[i%PRODUCT_PALETTE.length]);
+  const canvas=document.getElementById("mt-canvas");
+
+  if(_mtChart){try{_mtChart.destroy()}catch(e){}_mtChart=null;}
+  _mtChart=new Chart(canvas,{
+    type:"doughnut",
+    data:{
+      labels:entries.map(([n])=>n),
+      datasets:[{data:entries.map(([,v])=>v),backgroundColor:colors,borderWidth:0}]
+    },
+    options:{
+      responsive:false,plugins:{legend:{display:false},tooltip:{enabled:false}},
+      cutout:"65%",animation:{duration:250}
+    }
+  });
+
+  const leg=document.getElementById("mt-legend");
+  leg.innerHTML=entries.map(([name,val],i)=>
+    `<span><i style="background:${colors[i]}"></i>${esc(name.length>28?name.slice(0,28)+"…":name)} — ${val}</span>`
+  ).join("");
+
+  tt.style.display="block";
+  positionTooltip(tt,nativeEvt);
+}
+
+function hideMonthTooltip(){
+  document.getElementById("month-tooltip").style.display="none";
+}
+
+function positionTooltip(tt,evt){
+  const margin=12;
+  let x=evt.clientX+margin,y=evt.clientY-tt.offsetHeight/2;
+  if(x+tt.offsetWidth>window.innerWidth-margin) x=evt.clientX-tt.offsetWidth-margin;
+  if(y<margin) y=margin;
+  if(y+tt.offsetHeight>window.innerHeight-margin) y=window.innerHeight-tt.offsetHeight-margin;
+  tt.style.left=x+"px";tt.style.top=y+"px";
+}
+
+document.addEventListener("mousemove",e=>{
+  const tt=document.getElementById("month-tooltip");
+  if(tt.style.display==="block") positionTooltip(tt,e);
+});
+
+// ══════════════════════════════════════════════════════
 // UTILS
-// ══════════════════════════════════════════════════════════════════════════════
-function mk(tag, cls="") {
-  const el = document.createElement(tag);
-  if (cls) el.className = cls;
-  return el;
+// ══════════════════════════════════════════════════════
+function mk(tag,cls=""){const el=document.createElement(tag);if(cls)el.className=cls;return el}
+function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function fmt(n){return Number(n??0).toLocaleString("pt-BR")}
+function fmtBRL(n){return Number(n??0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function formatMonth(ym){
+  const [y,m]=ym.split("-");
+  return["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"][+m-1]+"/"+y.slice(2);
+}
+function updateTimestamp(iso){
+  const el=document.getElementById("last-update");
+  if(!iso){el.textContent="Dados indisponíveis";return;}
+  const d=new Date(iso);
+  el.textContent=`Atualizado ${d.toLocaleDateString("pt-BR")} às ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})} UTC`;
 }
 
-function esc(str) {
-  return String(str ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function fmt(n) {
-  return Number(n ?? 0).toLocaleString("pt-BR");
-}
-
-function fmtBRL(n) {
-  return Number(n ?? 0).toLocaleString("pt-BR", { minimumFractionDigits:2, maximumFractionDigits:2 });
-}
-
-function formatMonth(ym) {
-  const [y,m] = ym.split("-");
-  const months = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-  return `${months[+m-1]}/${y.slice(2)}`;
-}
-
-function updateTimestamp(iso) {
-  const el = document.getElementById("last-update");
-  if (!iso) { el.textContent = "Dados indisponíveis"; return; }
-  const d = new Date(iso);
-  el.textContent = `Atualizado ${d.toLocaleDateString("pt-BR")} às ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})} UTC`;
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════
 // BOOT
-// ══════════════════════════════════════════════════════════════════════════════
-async function init() {
-  try {
-    _data = await fetchData();
+// ══════════════════════════════════════════════════════
+async function init(){
+  try{
+    _data=await fetchData();
     updateTimestamp(_data.generated_at);
     document.getElementById("global-loading")?.remove();
     render(_data);
-  } catch(e) {
-    document.getElementById("app").innerHTML = `
+  }catch(e){
+    document.getElementById("app").innerHTML=`
       <div class="loading">
         <span style="color:var(--red)">⚠ Não foi possível carregar os dados.</span>
         <span style="font-size:12px;color:var(--muted)">${e.message}</span>
@@ -812,13 +744,10 @@ async function init() {
 }
 
 init();
-setInterval(async () => {
-  try {
-    _data = await fetchData();
-    updateTimestamp(_data.generated_at);
-    render(_data);
-  } catch(e) { console.warn("Refresh falhou:", e); }
-}, REFRESH_MS);
+setInterval(async()=>{
+  try{_data=await fetchData();updateTimestamp(_data.generated_at);render(_data);}
+  catch(e){console.warn("Refresh falhou:",e);}
+},REFRESH_MS);
 </script>
 </body>
 </html>
