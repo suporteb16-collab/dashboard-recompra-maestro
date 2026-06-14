@@ -114,13 +114,7 @@ main{max-width:1320px;margin:0 auto;padding:28px 20px 0}
   color:var(--kpi-accent,var(--gold2));line-height:1;
 }
 .kpi-sub{font-size:10px;color:var(--muted);margin-top:7px}
-.kpi-tip{
-  position:absolute;top:10px;right:10px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--surface2);border:1px solid var(--border);
-  color:var(--muted);font-size:9px;display:flex;align-items:center;justify-content:center;
-  cursor:help;
-}
+
 .kpi-tip .tip-box{
   display:none;position:absolute;z-index:400;
   bottom:calc(100% + 8px);right:0;left:auto;transform:none;
@@ -240,6 +234,97 @@ main{max-width:1320px;margin:0 auto;padding:28px 20px 0}
 .spinner{width:32px;height:32px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+
+/* ── Debug / Validação ───────────────────────────────── */
+.debug-section{margin-bottom:40px}
+.debug-toggle{
+  display:flex;align-items:center;gap:10px;cursor:pointer;
+  font-family:var(--font-d);font-size:18px;font-weight:600;
+  color:var(--muted);letter-spacing:.03em;margin-bottom:0;
+  padding:12px 0;border:none;background:none;width:100%;text-align:left;
+  transition:color .2s;
+}
+.debug-toggle:hover{color:var(--gold2)}
+.debug-toggle::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.debug-toggle .arrow{font-size:12px;transition:transform .25s;color:var(--muted)}
+.debug-toggle.open .arrow{transform:rotate(180deg)}
+.debug-body{display:none;margin-top:16px}
+.debug-body.open{display:block}
+.debug-meta{
+  display:flex;flex-wrap:wrap;gap:16px;margin-bottom:16px;
+  padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  font-size:12px;
+}
+.debug-meta span{color:var(--muted)}
+.debug-meta strong{color:var(--gold2);margin-left:4px}
+.debug-table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+table.debug-table{
+  width:100%;border-collapse:collapse;font-size:12px;
+}
+table.debug-table th{
+  background:var(--surface2);color:var(--muted);font-weight:600;
+  text-transform:uppercase;letter-spacing:.06em;font-size:10px;
+  padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+table.debug-table td{
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  color:var(--text);vertical-align:top;
+}
+table.debug-table tr:last-child td{border-bottom:none}
+table.debug-table tr:hover td{background:var(--surface2)}
+.badge{
+  display:inline-block;padding:2px 8px;border-radius:10px;
+  font-size:10px;font-weight:600;
+}
+.badge-green{background:rgba(34,211,165,.15);color:#22d3a5}
+.badge-gold{background:var(--gold-dim);color:var(--gold2)}
+.mono{font-family:monospace;font-size:11px;color:var(--muted)}
+.prod-tag{
+  display:inline-block;padding:2px 7px;border-radius:4px;
+  font-size:10px;margin:1px;font-weight:500;
+}
+
+/* ── Modal de definição ──────────────────────────────── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:#16161e;border:1px solid var(--border);
+  border-radius:14px;padding:28px 32px;max-width:420px;width:90%;
+  box-shadow:0 24px 64px rgba(0,0,0,.7);
+  position:relative;animation:modal-in .18s ease;
+}
+@keyframes modal-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.modal-box::before{
+  content:'';position:absolute;top:0;left:24px;right:24px;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold2),transparent);
+  border-radius:2px;
+}
+.modal-title{
+  font-family:var(--font-d);font-size:20px;font-weight:600;
+  color:var(--gold2);margin-bottom:12px;line-height:1.2;
+}
+.modal-body{font-size:13px;color:var(--text);line-height:1.7}
+.modal-close{
+  position:absolute;top:14px;right:16px;
+  background:none;border:none;color:var(--muted);font-size:20px;
+  cursor:pointer;line-height:1;padding:4px 8px;border-radius:6px;
+  transition:color .2s,background .2s;
+}
+.modal-close:hover{color:var(--text);background:var(--surface2)}
+.kpi-tip{
+  position:absolute;top:10px;right:10px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--muted);font-size:9px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .2s,color .2s;
+  z-index:1;
+}
+.kpi-tip:hover{border-color:var(--gold);color:var(--gold)}
 /* ── Responsive ──────────────────────────────────────────── */
 @media(max-width:1100px){
   .kpi-grid{grid-template-columns:repeat(5,1fr)}
@@ -275,6 +360,16 @@ main{max-width:1320px;margin:0 auto;padding:28px 20px 0}
   <div class="mt-title" id="mt-title"></div>
   <canvas id="mt-canvas" width="160" height="160"></canvas>
   <div class="mt-legend" id="mt-legend"></div>
+</div>
+
+
+<!-- Modal de definição de métricas -->
+<div class="modal-overlay" id="metric-modal" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button class="modal-close" id="modal-close" aria-label="Fechar">×</button>
+    <div class="modal-title" id="modal-title"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
 </div>
 
 <main id="app">
@@ -425,6 +520,7 @@ function render(data){
   renderActiveTags(app);
   renderKPIs(app,d.kpis);
   renderCharts(app,d);
+  renderDebug(app,d);
 }
 
 // ── Filters ───────────────────────────────────────────
@@ -526,8 +622,12 @@ function renderKPIs(container,kpis){
       <div class="kpi-label">${c.label}</div>
       <div class="kpi-value">${c.value}</div>
       <div class="kpi-sub">${esc(c.sub)}</div>
-      <div class="kpi-tip" tabindex="0">?<div class="tip-box">${esc(c.tip)}</div></div>
+      <div class="kpi-tip" tabindex="0" role="button" aria-label="Definição: ${esc(c.label)}">?</div>
     `;
+    card.querySelector(".kpi-tip").addEventListener("click", e=>{
+      e.stopPropagation();
+      openModal(c.label, "<p>"+esc(c.tip)+"</p>");
+    });
     grid.appendChild(card);
   });
 
@@ -747,6 +847,68 @@ document.addEventListener("mousemove",e=>{
   if(tt.style.display==="block") positionTooltip(tt,e);
 });
 
+
+// ── Debug / Validação ─────────────────────────────────
+function renderDebug(container, d){
+  const raw = d.raw || [];
+  const allBuyers = raw.slice().sort((a,b)=>b.count - a.count || b.ltv - a.ltv);
+  const top = allBuyers.slice(0, 20);
+  const totalPurchases = raw.reduce((s,b)=>s+b.count,0);
+  const rebuyers = raw.filter(b=>b.count>1).length;
+  const generatedAt = d.generated_at || "—";
+
+  const section = mk("div","debug-section");
+  const toggle = mk("button","debug-toggle");
+  toggle.innerHTML = "🔍 Validação de Dados <span class=\"arrow\">▼</span>";
+  section.appendChild(toggle);
+
+  const body = mk("div","debug-body");
+
+  const rows = top.map((b,i)=>{
+    const dates = b.purchases.map(p=>p.date).sort();
+    const first = dates[0]||"—";
+    const last  = dates[dates.length-1]||"—";
+    const spanDays = dates.length>=2 ? Math.round(Math.abs(new Date(last)-new Date(first))/86400000) : 0;
+    const origin = b.purchases[0]?.origin||"—";
+    const products = [...new Set(b.purchases.map(p=>p.product))];
+    return "<tr>"
+      +"<td style=\"color:var(--muted)\">"+(i+1)+"</td>"
+      +"<td class=\"mono\">"+esc(b.email_hash)+"</td>"
+      +"<td><span class=\"badge "+(b.count>=4?"badge-green":"badge-gold")+"\">"+(b.count)+"×</span></td>"
+      +"<td style=\"color:var(--gold2);font-weight:600\">R$ "+fmtBRL(b.ltv)+"</td>"
+      +"<td class=\"mono\">"+esc(first)+"</td>"
+      +"<td class=\"mono\">"+esc(last)+"</td>"
+      +"<td style=\"text-align:center\">"+spanDays+"d</td>"
+      +"<td><span style=\"color:"+(ORIGIN_COLORS[origin]||"var(--muted)")+"\">● </span>"+esc(origin)+"</td>"
+      +"<td>"+products.map(p=>"<span class=\"prod-tag\" style=\"background:"+productColor(p)+"22;color:"+productColor(p)+"\">"
+        +esc(p.length>28?p.slice(0,28)+"…":p)+"</span>").join("")+"</td>"
+      +"</tr>";
+  }).join("");
+
+  body.innerHTML =
+    "<div class=\"debug-meta\">"
+    +"<div><span>Atualizado:</span><strong>"+esc(generatedAt.replace("T"," ").replace("Z"," UTC"))+"</strong></div>"
+    +"<div><span>Compradores únicos:</span><strong>"+fmt(raw.length)+"</strong></div>"
+    +"<div><span>Total pedidos paid:</span><strong>"+fmt(totalPurchases)+"</strong></div>"
+    +"<div><span>Recompradores ≥2×:</span><strong>"+fmt(rebuyers)+"</strong></div>"
+    +"<div><span>Eventos:</span><strong>order_approved · subscription_payment · subscription_reactivated</strong></div>"
+    +"</div>"
+    +"<p style=\"font-size:11px;color:var(--muted);margin-bottom:12px\">Top 20 compradores por nº de compras. Email hasheado (SHA-256, 12 chars). Use para cruzar com a planilha.</p>"
+    +"<div class=\"debug-table-wrap\">"
+    +"<table class=\"debug-table\"><thead><tr>"
+    +"<th>#</th><th>Hash email</th><th>Compras</th><th>LTV</th>"
+    +"<th>1ª compra</th><th>Última</th><th>Intervalo</th><th>Origem</th><th>Produtos</th>"
+    +"</tr></thead><tbody>"+rows+"</tbody></table></div>";
+
+  section.appendChild(body);
+  container.appendChild(section);
+
+  toggle.addEventListener("click",()=>{
+    toggle.classList.toggle("open");
+    body.classList.toggle("open");
+  });
+}
+
 // ══════════════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════════════
@@ -764,6 +926,25 @@ function updateTimestamp(iso){
   const d=new Date(iso);
   el.textContent=`Atualizado ${d.toLocaleDateString("pt-BR")} às ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})} UTC`;
 }
+
+
+// ── Modal de definição ────────────────────────────────
+function openModal(title, body){
+  document.getElementById("modal-title").textContent = title;
+  document.getElementById("modal-body").innerHTML = body;
+  document.getElementById("metric-modal").classList.add("open");
+  document.getElementById("modal-close").focus();
+}
+function closeModal(){
+  document.getElementById("metric-modal").classList.remove("open");
+}
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.getElementById("modal-close").addEventListener("click", closeModal);
+  document.getElementById("metric-modal").addEventListener("click", e=>{
+    if(e.target === document.getElementById("metric-modal")) closeModal();
+  });
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+});
 
 // ══════════════════════════════════════════════════════
 // BOOT
