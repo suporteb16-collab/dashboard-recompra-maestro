@@ -892,7 +892,7 @@ function renderDebug(container, d){
     const products = [...new Set(b.purchases.map(p=>p.product))];
     return "<tr>"
       +"<td style=\"color:var(--muted)\">"+(i+1)+"</td>"
-      +"<td class=\"mono\">"+esc(b.email_hash)+"</td>"
+      +"<td style=\"font-size:11px;color:var(--text)\">"+esc(b.email_hash)+"</td>"
       +"<td><span class=\"badge "+(b.count>=4?"badge-green":"badge-gold")+"\">"+(b.count)+"×</span></td>"
       +"<td style=\"color:var(--gold2);font-weight:600\">R$ "+fmtBRL(b.ltv)+"</td>"
       +"<td class=\"mono\">"+esc(first)+"</td>"
@@ -912,14 +912,14 @@ function renderDebug(container, d){
     +"<div><span>Recompradores ≥2×:</span><strong>"+fmt(rebuyers)+"</strong></div>"
     +"<div><span>Eventos:</span><strong>order_approved · subscription_payment · subscription_reactivated</strong></div>"
     +"</div>"
-    +"<p style=\"font-size:11px;color:var(--muted);margin-bottom:12px\">Top 20 compradores por nº de compras. Email hasheado (SHA-256, 12 chars). Use para cruzar com a planilha.</p>"
+    +"<p style=\"font-size:11px;color:var(--muted);margin-bottom:12px\">Top 20 compradores por nº de compras. Use o email para cruzar diretamente com a planilha.</p>"
     +"<div class=\"debug-search-wrap\">"
     +"<span class=\"debug-search-icon\">🔍</span>"
     +"<input type=\"text\" id=\"debug-search\" placeholder=\"Buscar por hash, produto ou origem...\">"
     +"</div>"
     +"<div class=\"debug-table-wrap\">"
     +"<table class=\"debug-table\"><thead><tr>"
-    +"<th>#</th><th>Hash email</th><th>Compras</th><th>LTV</th>"
+    +"<th>#</th><th>Email</th><th>Compras</th><th>LTV</th>"
     +"<th>1ª compra</th><th>Última</th><th>Intervalo</th><th>Origem</th><th>Produtos</th>"
     +"</tr></thead><tbody>"+rows+"</tbody></table></div>";
 
