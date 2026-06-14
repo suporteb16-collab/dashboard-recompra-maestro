@@ -325,6 +325,25 @@ table.debug-table tr:hover td{background:var(--surface2)}
   z-index:1;
 }
 .kpi-tip:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── Debug search ────────────────────────────────────── */
+.debug-search-wrap{
+  position:relative;margin-bottom:14px;max-width:360px;
+}
+.debug-search-wrap input{
+  width:100%;background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);padding:9px 12px 9px 36px;border-radius:8px;
+  font-size:13px;font-family:var(--font-b);transition:border-color .2s;
+}
+.debug-search-wrap input:focus{outline:none;border-color:var(--gold)}
+.debug-search-wrap input::placeholder{color:var(--muted)}
+.debug-search-icon{
+  position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:14px;pointer-events:none;
+}
+.debug-no-results{
+  text-align:center;padding:24px;color:var(--muted);font-size:13px;
+}
 /* ── Responsive ──────────────────────────────────────────── */
 @media(max-width:1100px){
   .kpi-grid{grid-template-columns:repeat(5,1fr)}
@@ -894,6 +913,10 @@ function renderDebug(container, d){
     +"<div><span>Eventos:</span><strong>order_approved · subscription_payment · subscription_reactivated</strong></div>"
     +"</div>"
     +"<p style=\"font-size:11px;color:var(--muted);margin-bottom:12px\">Top 20 compradores por nº de compras. Email hasheado (SHA-256, 12 chars). Use para cruzar com a planilha.</p>"
+    +"<div class=\"debug-search-wrap\">"
+    +"<span class=\"debug-search-icon\">🔍</span>"
+    +"<input type=\"text\" id=\"debug-search\" placeholder=\"Buscar por hash, produto ou origem...\">"
+    +"</div>"
     +"<div class=\"debug-table-wrap\">"
     +"<table class=\"debug-table\"><thead><tr>"
     +"<th>#</th><th>Hash email</th><th>Compras</th><th>LTV</th>"
@@ -906,6 +929,38 @@ function renderDebug(container, d){
   toggle.addEventListener("click",()=>{
     toggle.classList.toggle("open");
     body.classList.toggle("open");
+    // Focar no search ao abrir
+    if(body.classList.contains("open")){
+      setTimeout(()=>{ const s=document.getElementById("debug-search"); if(s) s.focus(); },50);
+    }
+  });
+
+  // Busca em tempo real
+  body.addEventListener("input", e=>{
+    if(e.target.id !== "debug-search") return;
+    const q = e.target.value.toLowerCase().trim();
+    const tbody = body.querySelector("tbody");
+    if(!tbody) return;
+    let found = 0;
+    tbody.querySelectorAll("tr").forEach(tr=>{
+      const text = tr.textContent.toLowerCase();
+      const show = !q || text.includes(q);
+      tr.style.display = show ? "" : "none";
+      if(show) found++;
+    });
+    // Mensagem sem resultado
+    let noRes = body.querySelector(".debug-no-results");
+    if(!found && q){
+      if(!noRes){
+        noRes = document.createElement("div");
+        noRes.className = "debug-no-results";
+        tbody.parentElement.parentElement.appendChild(noRes);
+      }
+      noRes.textContent = "Nenhum resultado para "" + q + """;
+      noRes.style.display = "";
+    } else if(noRes){
+      noRes.style.display = "none";
+    }
   });
 }
 
